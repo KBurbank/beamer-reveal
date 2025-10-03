@@ -48,6 +48,11 @@ function RawInline(elem)
   
   local text = elem.text
   
+  -- Debug: log onslide commands
+  if text:match("^\\onslide") then
+    io.stderr:write("DEBUG RawInline onslide: [" .. text .. "]\n")
+  end
+  
   -- Don't handle \pause here - it's handled at the Para level to split paragraphs
   
   -- Handle \only<n>{content}
