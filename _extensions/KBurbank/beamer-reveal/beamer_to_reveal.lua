@@ -48,11 +48,6 @@ function RawInline(elem)
   
   local text = elem.text
   
-  -- Debug: log onslide commands
-  if text:match("^\\onslide") then
-    io.stderr:write("DEBUG RawInline onslide: [" .. text .. "]\n")
-  end
-  
   -- Don't handle \pause here - it's handled at the Para level to split paragraphs
   
   -- Handle \only<n>{content}
@@ -65,8 +60,18 @@ function RawInline(elem)
   -- Handle \onslide<n>{content}
   idx, content = text:match("^\\onslide<(%d+%-?)>%s*{(.+)}$")
   if idx and content then
+    io.stderr:write("  --> MATCHED! idx=[" .. idx .. "] content=[" .. content .. "]\n")
     local clean_idx, has_dash = parse_index(idx)
     return beamer_to_span("fadein", clean_idx, content, has_dash)
+  else
+    if text:match("^\\onslide") then
+      io.stderr:write("  --> NO MATCH for pattern. Trying simpler match...\n")
+      -- Try without the end anchor
+      idx, content = text:match("^\\onslide<(%d+%-?)>%s*{(.+)}")
+      if idx and content then
+        io.stderr:write("  --> SIMPLER PATTERN MATCHED! idx=[" .. idx .. "] content=[" .. content .. "]\n")
+      end
+    end
   end
   
   -- Handle \hid<n>{content} (fadeout)
