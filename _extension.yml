@@ -1,0 +1,9 @@
+title: Beamer to Reveal.js
+version: 2.0.0
+author: Kendra Burbank
+contributes:
+  filters:
+    - _extensions/latex-macros/inject_latex_macros.lua
+    - _extensions/latex-macros/parse_latex_simple.lua
+    - beamer_to_reveal.lua
+
